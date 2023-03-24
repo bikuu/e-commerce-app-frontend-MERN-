@@ -1,4 +1,3 @@
-import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PageNotFound from "./pages/404.jsx";
@@ -12,8 +11,10 @@ import Cart from "./pages/Cart";
 import { setcart } from "./redux/slice/cartSlice";
 import Create from "./pages/product/Create";
 import { getUser } from "./api/ApiCalls";
-
+import Navbar from "./components/navbar/Navbar";
+import "./App.css";
 function App() {
+  const user = useSelector((state) => state.value);
   const dispatch = useDispatch();
   useEffect(() => {
     getUser().then((res) => {
@@ -29,7 +30,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container">
+      <div className="container-fluid" style={{ background: "#232f3e" }}>
         <Routes>
           <Route path="" element={<Home />} />
           <Route path="login" element={<Login />} />
