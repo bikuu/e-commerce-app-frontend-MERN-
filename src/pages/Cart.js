@@ -13,7 +13,7 @@ export default function Cart() {
   }, 0);
   return (
     <div>
-      <table class="table caption-top">
+      <table class="table caption-top text-light">
         <caption>Shopping Carts</caption>
         <thead>
           <tr>

@@ -4,7 +4,10 @@ import ImageNotFound from "../assets/images/ImageNotFound.jpg";
 
 export default function Card({ product, handleAddToCart }) {
   return (
-    <div className=" col-md-3 mb-5" style={{ height: "300px" }}>
+    <div
+      className="col-sm-6 col-md-4 col-lg-3 mb-5"
+      style={{ height: "300px" }}
+    >
       <Link to={`/products/${product._id}`}>
         <div
           class="card h-100 shadow p-3 mb-5"

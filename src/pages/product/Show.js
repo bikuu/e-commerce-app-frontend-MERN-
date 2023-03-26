@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getProduct } from "./../../api/ApiCalls";
@@ -15,7 +14,7 @@ export default function Show() {
   console.log(product);
   return (
     <div>
-      <div class="card mb-3">
+      <div class="card mb-3 ">
         <div class="row g-0">
           <div className="col-md-4">
             <div
@@ -93,63 +92,66 @@ export default function Show() {
         </div>
       </div>
       <hr />
-      <h2>Reviews</h2>
-      <div
-        id="carouselExampleIndicators"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="0"
-            class="active"
-            aria-current="true"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
-        </div>
-        <div class="carousel-inner">
-          {product.reviews?.map((review, index) => (
-            <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
-              {review}
-            </div>
-          ))}
-        </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="prev"
+      <h2 class="text-light">Reviews</h2>
+      {product.reviews?.length != 0 && (
+        <div
+          id="carouselExampleIndicators"
+          class="carousel slide"
+          data-bs-ride="carousel"
         >
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleIndicators"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+          <div class="carousel-indicators">
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="0"
+              class="active"
+              aria-current="true"
+              aria-label="Slide 1"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="1"
+              aria-label="Slide 2"
+            ></button>
+            <button
+              type="button"
+              data-bs-target="#carouselExampleIndicators"
+              data-bs-slide-to="2"
+              aria-label="Slide 3"
+            ></button>
+          </div>
+          <div class="carousel-inner">
+            {product.reviews?.map((review, index) => (
+              <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
+                {review}
+              </div>
+            ))}
+          </div>
+          <button
+            class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev"
+          >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button
+            class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next"
+          >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      )}
+
       <hr />
-      <h2>Leave Your Review Here</h2>
-      <form>
+      <h2 class="text-light">Leave Your Review Here</h2>
+      <form class="w-50">
         <div class="form-floating mb-3">
           <input
             type="email"
@@ -169,7 +171,7 @@ export default function Show() {
           <label htmlFor="floatingTextarea2">Leave Your Opinion</label>
         </div>{" "}
         <div class="col-12">
-          <button class="btn btn-primary" type="submit">
+          <button class="btn btn-outline-success" type="submit">
             Submit Review
           </button>
         </div>

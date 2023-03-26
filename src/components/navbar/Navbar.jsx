@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../redux/slice/userSlice";
-import defaultImg from "../../dummy/pets.jpg";
+import defaultImg from "../../assets/images/pets.jpg";
 import { useState } from "react";
 export default function Navbar() {
   const user = useSelector((redux_state) => redux_state.user.value);
@@ -14,14 +14,15 @@ export default function Navbar() {
     dispatch(logout());
   };
   return (
-    <nav class="navbar sticky-top navbar-dark bg-dark text-light">
-      <div class="container-fluid d-flex justify-content-around align-items-center">
+    <nav class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm   sticky-top  bg-dark text-light">
+      <div class="container-fluid d-flex   justify-content-around align-items-center   ">
         <Link
-          class="navbar-brand text-success mb-0 fs-3 fw-bolder w-20 p-3 mx-2 logo"
+          class="navbar-brand text-success mb-0 fs-3 fw-bolder p-3 mx-2 "
           to=""
         >
           E-Commerce
         </Link>
+
         <form class=" d-flex justify-content-center align-items-center w-50 p-3">
           <input
             class="form-control me-2"
@@ -53,24 +54,28 @@ export default function Navbar() {
         ) : (
           <div class="d-flex justify-content-end align-items-center">
             {user?.role === "buyer" ? (
-              <button
-                type="button"
-                class="btn btn-dark btn-outline-success mx-5 h-25 "
-              >
-                Cart({cart_items.length})
-              </button>
+              <Link to="/cart">
+                <button
+                  type="button"
+                  class="btn btn-dark btn-outline-success mx-5 h-25 "
+                >
+                  Cart({cart_items.length})
+                </button>
+              </Link>
             ) : (
-              <button
-                type="button"
-                class="btn btn-dark btn-outline-success mx-5 h-25 "
-              >
-                Create Post{" "}
-              </button>
+              <Link to="/products/create">
+                <button
+                  type="button"
+                  class="btn btn-dark btn-outline-success mx-5 h-25 "
+                >
+                  Create Post{" "}
+                </button>
+              </Link>
             )}
 
             <div
+              class=" position-relative"
               style={{
-                position: "relative",
                 cursor: "pointer",
               }}
               onClick={() => setShow((prev) => !prev)}
@@ -87,8 +92,8 @@ export default function Navbar() {
                 }}
               />
               <span
+                class="position-absolute"
                 style={{
-                  position: "absolute",
                   width: "12px",
                   height: "12px",
                   borderRadius: "50%",
@@ -100,9 +105,8 @@ export default function Navbar() {
               ></span>
               {!show && (
                 <i
-                  class="fa-sharp fa-solid fa-arrow-down fa-2xl text-success"
+                  class="fa-sharp fa-solid fa-arrow-down fa-2xl text-success position-absolute"
                   style={{
-                    position: "absolute",
                     bottom: "9px",
                     right: "-5px",
                     fontSize: "15px",
@@ -112,18 +116,16 @@ export default function Navbar() {
               {show && (
                 <>
                   <i
-                    class="fa-sharp fa-solid fa-arrow-up fa-2xl text-success"
+                    class="fa-sharp fa-solid fa-arrow-up fa-2xl text-success position-absolute"
                     style={{
-                      position: "absolute",
                       bottom: "9px",
                       right: "-5px",
                       fontSize: "15px",
                     }}
                   ></i>
                   <div
-                    class="d-flex flex-column align-items-start"
+                    class="d-flex flex-column align-items-start position-absolute"
                     style={{
-                      position: "absolute",
                       bottom: "-460%",
                       right: "-2px",
                       width: "max-content",

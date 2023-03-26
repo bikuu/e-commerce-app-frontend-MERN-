@@ -57,7 +57,7 @@ export default function Create() {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label required-field">price</label>
+          <label className="form-label required-field">Price</label>
           <input
             type="number"
             className="form-control"

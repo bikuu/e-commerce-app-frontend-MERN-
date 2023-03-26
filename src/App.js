@@ -30,7 +30,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container-fluid" style={{ background: "#232f3e" }}>
+      <div className="container-fluid" >
         <Routes>
           <Route path="" element={<Home />} />
           <Route path="login" element={<Login />} />
