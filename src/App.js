@@ -1,17 +1,17 @@
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
 import PageNotFound from "./pages/404.jsx";
 import { Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
 import { useEffect } from "react";
 import { setUser } from "./redux/slice/userSlice";
+import { setcart } from "./redux/slice/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Home from "./pages/Home";
 import Show from "./pages/product/Show";
 import Cart from "./pages/Cart";
-import { setcart } from "./redux/slice/cartSlice";
-import Create from "./pages/product/Create";
-import { getUser } from "./api/ApiCalls";
+import Upsert from "./pages/product/Upsert";
 import Navbar from "./components/navbar/Navbar";
+import { getUser } from "./api/ApiCalls";
 import "./App.css";
 function App() {
   const user = useSelector((state) => state.value);
@@ -30,7 +30,7 @@ function App() {
   return (
     <>
       <Navbar />
-      <div className="container-fluid" >
+      <div className="container-fluid">
         <Routes>
           <Route path="" element={<Home />} />
           <Route path="login" element={<Login />} />
@@ -39,7 +39,8 @@ function App() {
           <Route path="products">
             <Route index element={<Home />} />
             <Route path=":id" element={<Show />} />
-            <Route path="create" element={<Create />} />
+            <Route path="edit/:id" element={<Upsert />} />
+            <Route path="create" element={<Upsert />} />{" "}
           </Route>
 
           <Route path="*" element={<PageNotFound />} />

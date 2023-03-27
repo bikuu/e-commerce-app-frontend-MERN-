@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { logout } from "../../redux/slice/userSlice";
 import defaultImg from "../../assets/images/pets.jpg";
 import { useState } from "react";
+import { BUYER, SELLER } from "../../constants/role";
 export default function Navbar() {
   const user = useSelector((redux_state) => redux_state.user.value);
   const cart_items = useSelector((redux_state) => redux_state.cart_items.value);
@@ -53,7 +54,7 @@ export default function Navbar() {
           </div>
         ) : (
           <div class="d-flex justify-content-end align-items-center">
-            {user?.role === "buyer" ? (
+            {user?.role !== SELLER ? (
               <Link to="/cart">
                 <button
                   type="button"
@@ -141,7 +142,7 @@ export default function Navbar() {
                         textTransform: "capitalize",
                       }}
                     >
-                      Switch to {user?.role === "seller" ? "buyer" : "seller"}
+                      Switch to {user?.role === SELLER ? BUYER : SELLER}
                     </button>
                     <div class="align-self-end d-flex justify-content-center align-items-center mx-2">
                       <img

@@ -1,6 +1,5 @@
-import axios from "axios";
 import React, { useState, useRef } from "react";
-import { uploadProducts } from "./../../api/ApiCalls";
+import { uploadProducts } from "../../api/ApiCalls";
 
 export default function Create() {
   const [formData, setFormData] = useState({
@@ -45,7 +44,7 @@ export default function Create() {
   }
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="text-white">
         <div className="mb-3">
           <label className="form-label required-field">Name</label>
           <input
