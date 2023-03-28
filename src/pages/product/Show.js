@@ -1,16 +1,37 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getProduct } from "./../../api/ApiCalls";
+import { BUYER } from "../../constants/role";
+import { getProduct, updateProduct } from "./../../api/ApiCalls";
+import { useSelector } from "react-redux";
+import Rating from "react-rating";
 
 export default function Show() {
   const [product, setproduct] = useState({});
   const { id } = useParams();
+  const [ratingValue, setRatingValue] = useState(0);
 
-  useEffect(() => {
+  const user = useSelector((redux_store) => {
+    return redux_store.user.value;
+  });
+
+  function fetchProductDetail() {
     getProduct(id).then((res) => {
       setproduct(res.data.data);
     });
+  }
+
+  useEffect(() => {
+    fetchProductDetail();
   }, []);
+
+  function updateReview(e) {
+    e.preventDefault();
+    const reviewData = { rating: ratingValue, comment: e.target.comment.value };
+    updateProduct(id, reviewData).then((res) => {
+      fetchProductDetail();
+    });
+  }
+
   console.log(product);
   return (
     <div>
@@ -92,90 +113,79 @@ export default function Show() {
         </div>
       </div>
       <hr />
-      <h2 class="text-light">Reviews</h2>
-      {product.reviews?.length != 0 && (
-        <div
-          id="carouselExampleIndicators"
-          class="carousel slide"
-          data-bs-ride="carousel"
-        >
-          <div class="carousel-indicators">
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="0"
-              class="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleIndicators"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"
-            ></button>
-          </div>
-          <div class="carousel-inner">
-            {product.reviews?.map((review, index) => (
-              <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
-                {review}
-              </div>
-            ))}
-          </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
+      <h2 class="text-light">Latest Reviews</h2>
+
+      {product.reviews?.length != 0 ? (
+        <div class="row w-50">
+          {product.reviews?.map((review) => {
+            let temp = [];
+
+            for (let i = 0; i < review.rating; i++) {
+              temp.push("");
+            }
+            return (
+              <>
+                <div class="col-sm-6">
+                  <div class="card text-center ">
+                    <div
+                      className="d-block w-100 "
+                      style={{
+                        boxShadow: "1px 1px 10px 0px grey",
+                      }}
+                    >
+                      <p className="mb-0">
+                        {review.created_by.name}{" "}
+                        {temp.map((el) => {
+                          return <i class="fa-solid fa-star"></i>;
+                        })}{" "}
+                      </p>
+                      <p>{review.comment}</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            );
+          })}
         </div>
+      ) : (
+        <p class="text-light">no reviews yet</p>
       )}
 
       <hr />
-      <h2 class="text-light">Leave Your Review Here</h2>
-      <form class="w-50">
-        <div class="form-floating mb-3">
-          <input
-            type="email"
-            class="form-control"
-            id="floatingInput"
-            placeholder="name@example.com"
-          />
-          <label htmlFor="floatingInput">Email address</label>
-        </div>
-        <div class="form-floating mb-3">
-          <textarea
-            class="form-control"
-            placeholder="Leave a comment here"
-            id="floatingTextarea2"
-            style={{ height: "100px" }}
-          ></textarea>
-          <label htmlFor="floatingTextarea2">Leave Your Opinion</label>
-        </div>{" "}
-        <div class="col-12">
-          <button class="btn btn-outline-success" type="submit">
-            Submit Review
-          </button>
-        </div>
-      </form>
+      {user?.role == BUYER && (
+        <>
+          <h2 class="text-light">Leave Your Review Here</h2>
+          <form class="w-50 text-light" onSubmit={updateReview}>
+            <div class="form-label mb-3">
+              <Rating
+                initialRating={ratingValue}
+                onChange={(e) => {
+                  setRatingValue(e);
+                }}
+                emptySymbol={<i class="fa-regular fa-star fa-2xl"></i>}
+                fullSymbol={<i class="fa-solid fa-star fa-2xl"></i>}
+              />
+            </div>
+            <div class="form-floating mb-3">
+              <textarea
+                class="form-control"
+                name="comment"
+                placeholder="Leave a comment here"
+                id="floatingTextarea2"
+                style={{ height: "100px" }}
+              ></textarea>
+              <label htmlFor="floatingTextarea2" class="text-dark">
+                Leave Your Opinion
+              </label>
+            </div>{" "}
+            <div class="col-12">
+              <button class="btn btn-outline-success" type="submit">
+                Submit Review
+              </button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 }
