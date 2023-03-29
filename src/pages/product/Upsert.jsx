@@ -1,70 +1,173 @@
 import React, { useState, useRef } from "react";
-import { uploadProducts } from "../../api/ApiCalls";
+import { uploadProducts, updateProduct, getProduct } from "../../api/ApiCalls";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Create() {
-  const [formData, setFormData] = useState({
+  const [product, setproduct] = useState({
     name: "",
     price: "",
+    in_stock: "",
+    description: "",
+    images: [],
+    categories: [],
   });
-  const [image, setImage] = useState([]);
+
+  const { id } = useParams();
   const imageRef = useRef();
 
   function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setproduct({ ...product, [e.target.name]: e.target.value });
   }
+
   const onImageChange = (e) => {
     e.preventDefault();
     if (e.target.files) {
-      let img = [...image, ...e.target.files];
-      setImage(img);
+      let img = { ...product, images: [...product.images, ...e.target.files] };
+      setproduct(img);
     }
   };
+  useEffect(() => {
+    if (id) {
+      getProduct(id).then((res) => {
+        setproduct(res.data.data);
+      });
+    }
+  }, []);
+
   function handleSubmit(e) {
     e.preventDefault();
 
     const data = new FormData();
-    // const filename = Date.now() + image.name;
-    data.append("name", formData.name);
-    data.append("price", formData.price);
-    if (image) {
-      image.forEach((img) => {
+    data.append("name", product.name);
+    data.append("price", product.price);
+    data.append("description", product.description);
+    data.append("in_stock", product.in_stock);
+
+    product.categories.forEach((category) => {
+      data.append("categories[]", category);
+    });
+    if (product.images) {
+      product.images.forEach((img) => {
         data.append("images", img);
       });
     }
     try {
-      uploadProducts(data).then((res) => console.log(res.data));
-      setImage(null);
-      setFormData({
-        name: "",
-        price: "",
-      });
+      if (id) {
+        updateProduct(id, data).then((res) => console.log(res.data));
+        setImage(null);
+      } else {
+        uploadProducts(data).then((res) => console.log(res.data));
+        setImage(null);
+      }
     } catch (error) {
       console.log(error);
     }
   }
+
+  function addCategory() {
+    let temp = product.categories; // []
+    temp.push("");
+
+    setproduct({
+      ...product,
+      categories: temp,
+    });
+  }
   return (
     <div>
       <form onSubmit={handleSubmit} className="text-white">
-        <div className="mb-3">
-          <label className="form-label required-field">Name</label>
+        <div class="mb-3">
+          <label class="form-label required-field">Name</label>
           <input
             type="text"
-            className="form-control"
+            class="form-control"
             name="name"
-            value={formData.name}
+            value={product.name}
             onChange={handleChange}
           />
         </div>
-        <div className="mb-3">
-          <label className="form-label required-field">Price</label>
+        <div class="mb-3">
+          <label class="form-label required-field">price</label>
           <input
             type="number"
-            className="form-control"
+            class="form-control"
             name="price"
-            value={formData.price}
+            value={product.price}
             onChange={handleChange}
           />
         </div>
+        <div class="mb-3">
+          <label class="form-label required-field">In Stock</label>
+          <input
+            type="number"
+            class="form-control"
+            name="in_stock"
+            value={product.in_stock}
+            onChange={handleChange}
+          />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            Categories{" "}
+            <button
+              class="btn btn-sm mx-2 btn-outline-success"
+              onClick={addCategory}
+            >
+              Add Category{" "}
+            </button>
+          </label>
+          {product.categories.map((category, index) => {
+            return (
+              <div className="d-flex align-items-center mb-2">
+                <input
+                  type=""
+                  class="form-control  "
+                  name=""
+                  value={category}
+                  onChange={(e) => {
+                    let temp = product.categories;
+                    temp = temp.map((el, idx) => {
+                      if (index == idx) {
+                        return e.target.value;
+                      }
+                      return el;
+                    });
+
+                    setproduct({ ...product, categories: temp });
+                  }}
+                />
+                <button
+                  className="mx-2  btn btn-danger btn-sm"
+                  onClick={() => {
+                    let temp = product.categories;
+                    temp = temp.filter((el, idx) => {
+                      if (index != idx) {
+                        return true;
+                      }
+                      return false;
+                    });
+
+                    setproduct({ ...product, categories: temp });
+                  }}
+                >
+                  {" "}
+                  -{" "}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        <div class="mb-3">
+          <label class="form-label ">Description</label>
+          <textarea
+            class="form-control"
+            name="description"
+            value={product?.description}
+            onChange={handleChange}
+          />
+        </div>
+
         <div
           onClick={() => imageRef.current.click()}
           style={{
@@ -89,11 +192,21 @@ export default function Create() {
             onChange={onImageChange}
           />
         </div>
-        {/* {image && (
-          <div onClick={() => setImage(null)}>
-            <img src={URL.createObjectURL(image)} alt="" />
+        {product.images && (
+          <div>
+            {product?.images?.map((image) => {
+              let img_src = "";
+
+              if (typeof image == "string") {
+                img_src = image;
+              } else {
+                img_src = URL.createObjectURL(image);
+              }
+
+              return <img height={200} width={200} src={img_src} />;
+            })}{" "}
           </div>
-        )} */}
+        )}
         <button type="submit" className="btn btn-primary">
           Submit
         </button>

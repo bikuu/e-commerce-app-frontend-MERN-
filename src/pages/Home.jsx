@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { addToCart } from "../redux/slice/cartSlice";
 import { useDispatch } from "react-redux";
-import { getAllProducts } from "./../api/ApiCalls";
+import { deleteProduct, getAllProducts } from "./../api/ApiCalls";
 import Card from "../components/Card";
 
 export default function Home() {
@@ -25,6 +25,13 @@ export default function Home() {
     e.preventDefault();
 
     dispatch(addToCart(product));
+  }
+
+  function handleDelete(id) {
+    deleteProduct(id).then((res) => {
+      let newProuct = products.filter((product) => product._id !== id);
+      setproducts(newProuct);
+    });
   }
 
   function handlePrevClick() {
@@ -94,6 +101,7 @@ export default function Home() {
               product={product}
               handleAddToCart={handleAddToCart}
               key={product._id}
+              handleDelete={handleDelete}
             />
           );
         })}

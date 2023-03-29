@@ -26,6 +26,8 @@ export const getAllProducts = () => API.get("/products");
 export const getProduct = (id) => API.get(`/products/${id}`);
 export const deleteProduct = (id) => API.delete(`/products/${id}`);
 export const updateProduct = (id, data) =>
+  API.put(`/products/${id}`,data);
+export const updateProductReview = (id, data) =>
   API.put(`/products/review/${id}`,data);
 export const uploadProducts = (data) => API.post("/products", data);
 

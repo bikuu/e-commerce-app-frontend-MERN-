@@ -40,30 +40,37 @@ export default function Show() {
           <div className="col-md-4">
             <div
               id="carouselExampleControls"
-              class="carousel slide"
+              class="carousel carousel-dark slide "
               data-bs-ride="carousel"
             >
               <div class="carousel-inner">
                 {product.images?.map((image, index) => (
                   <div
-                    class={`carousel-item ${index === 0 ? "active" : ""}`}
+                    class={` carousel-item ${
+                      index === 0 ? "active" : ""
+                    }`}
                     key={index}
                   >
-                    <img src={image} class="d-block w-100" alt="..." />
+                    <img
+                      src={image}
+                      class="d-block w-100 "
+                      style={{ height: "300px", objectFit: "contain" }}
+                      alt="..."
+                    />
                   </div>
                 ))}
               </div>
               <button
-                class="carousel-control-prev"
+                class=" carousel-control-prev  "
                 type="button"
                 data-bs-target="#carouselExampleControls"
                 data-bs-slide="prev"
               >
                 <span
-                  class="carousel-control-prev-icon"
+                  class="carousel-control-prev-icon  "
                   aria-hidden="true"
                 ></span>
-                <span class="visually-hidden">Previous</span>
+                <span class=" visually-hidden ">Previous</span>
               </button>
               <button
                 class="carousel-control-next"
@@ -81,6 +88,15 @@ export default function Show() {
           </div>{" "}
           <div class="col-md-8">
             <div class="card-body">
+              <div class="card-title col d-flex justify-content-start align-items-center">
+                <span> Average Rate :</span>{" "}
+                <Rating
+                  initialRating={product.avg_rating}
+                  emptySymbol={<i class="fa-regular fa-star fa-2xl"></i>}
+                  fullSymbol={<i class="fa-solid fa-star fa-2xl"></i>}
+                  readonly
+                />
+              </div>
               <div class="card-title col d-flex justify-content-start align-items-center">
                 <span> Product Name :</span>{" "}
                 <h2 className="ms-2"> {product.name}</h2>
