@@ -4,12 +4,17 @@ import { logout } from "../../redux/slice/userSlice";
 import defaultImg from "../../assets/images/pets.jpg";
 import { useState } from "react";
 import { BUYER, SELLER } from "../../constants/role";
-export default function Navbar() {
+export default function Navbar({ setsearchResult }) {
   const user = useSelector((redux_state) => redux_state.user.value);
   const cart_items = useSelector((redux_state) => redux_state.cart_items.value);
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
+  const [search, setSearch] = useState("");
 
+  function handleSearch(e) {
+    e.preventDefault();
+    setsearchResult(search);
+  }
   const handleLogout = () => {
     // localStorage.removeItem("access_token")
     dispatch(logout());
@@ -24,12 +29,17 @@ export default function Navbar() {
           E-Commerce
         </Link>
 
-        <form class=" d-flex justify-content-center align-items-center w-50 p-3">
+        <form
+          class=" d-flex justify-content-center align-items-center w-50 p-3"
+          onSubmit={handleSearch}
+        >
           <input
             class="form-control me-2"
             type="search"
+            value={search}
             placeholder="Search"
             aria-label="Search"
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button class="btn btn-outline-success" type="submit">
             Search

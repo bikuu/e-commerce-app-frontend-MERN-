@@ -55,10 +55,8 @@ export default function Create() {
     try {
       if (id) {
         updateProduct(id, data).then((res) => console.log(res.data));
-        setImage(null);
       } else {
         uploadProducts(data).then((res) => console.log(res.data));
-        setImage(null);
       }
     } catch (error) {
       console.log(error);

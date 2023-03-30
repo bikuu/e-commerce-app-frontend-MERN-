@@ -1,26 +1,26 @@
 import { useState, useEffect } from "react";
 import { addToCart } from "../redux/slice/cartSlice";
-import { useDispatch } from "react-redux";
+import { allProducts } from "../redux/slice/productSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, getAllProducts } from "./../api/ApiCalls";
 import Card from "../components/Card";
 
-export default function Home() {
+export default function Home({ resultValue }) {
   const dispatch = useDispatch();
-  const [products, setproducts] = useState(null);
+  const products = useSelector((state) => state.product.value);
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 8;
   const totalPages = Math.ceil(products?.length / limit);
   useEffect(() => {
     getAllProducts()
       .then((res) => {
-        setproducts(res.data.data[0].data);
+        dispatch(allProducts(res.data.data[0].data));
         console.log(res.data.data[0].data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
   function handleAddToCart(e, product) {
     e.preventDefault();
 
@@ -30,7 +30,7 @@ export default function Home() {
   function handleDelete(id) {
     deleteProduct(id).then((res) => {
       let newProuct = products.filter((product) => product._id !== id);
-      setproducts(newProuct);
+      dispatch(allProducts(newProuct));
     });
   }
 
@@ -53,11 +53,16 @@ export default function Home() {
     }
     return pageNumbers;
   }
-
   const pageNumbers = getPageNumbers();
   const startIndex = (currentPage - 1) * limit;
   const endIndex = startIndex + limit;
-  const currentProducts = products?.slice(startIndex, endIndex);
+  let currentProducts;
+  if (resultValue !== undefined && resultValue.length > 0) {
+    currentProducts = resultValue?.slice(startIndex, endIndex);
+  } else {
+    currentProducts = products?.slice(startIndex, endIndex);
+    console.log("sorry");
+  }
   return (
     <>
       <div
